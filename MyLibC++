@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include "funzioni.h"
+#include <cstdlib>
+#include <iomanip>
+
+void upload(char *filename, int n, double *data) // funzione di upload dati
+{
+  ifstream fin(filename);
+  if (!fin) {
+    cout << "Cannot open file" << endl;
+    exit(0);
+  } else {
+    for (int i = 0; i < n; i++) {
+      fin >> data[i];
+      if (fin.eof()) {
+        cout << "End of file reached existing" << endl;
+      }
+    }
+  }
+}
+
+
+void download(double *data, int n) // funzione di download dati ordinati
+{
+  ofstream fout("output.txt");
+  for (int i = 0; i < n; i++)
+    fout << data[i] << endl;
+}
+
+void show(double *a, int n) // funzione di stampa dati
+{
+  for(int i=0 ; i<n ; i++) cout << a[i] << endl;
+}
+
+
+double media(double *data, int n) // funzione di media dati
+{
+  double S = 0;
+  for (int i = 0; i < n; i++)
+    S = S + data[i];
+
+  return S / n;
+}
+
+double stddev(double *data, int n, double av) // funzione di std dev
+{
+  double sp = 0;
+  for (int i = 0; i < n; i++)
+    sp = sp + pow((av - data[i]), 2);
+
+  return sqrt(sp / (n - 1));
+}
+
+
+void sort(double *data, int n) // funzione di sorting dati
+{
+  double *datacopy = new double[n];
+  for (int i = 0; i < n; i++)
+    datacopy[i] = data[i];
+
+  int imin = 0;
+  double min = 0;
+  for (int j = 0; j < n - 1; j++) {
+    imin = j;
+    min = datacopy[imin];
+    for (int i = j + 1; i < n; i++) {
+      if (datacopy[i] < min) {
+        min = datacopy[i];
+        imin = i;
+      }
+    }
+    double c = datacopy[j];
+    datacopy[j] = datacopy[imin];
+    datacopy[imin] = c;
+  }
+}
+
+
+double mediana(double *data, int n) // funzione di mediana dati
+{
+  if (n % 2 == 0)
+    return data[n / 2] + data[n / 2 + 1];
+  else
+    return data[(n + 1) / 2];
+}
